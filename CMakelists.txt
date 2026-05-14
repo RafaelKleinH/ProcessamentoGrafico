@@ -49,6 +49,7 @@ set(EXERCISES
     SpherePhong
     CuboIluminacao
     M2
+    AtivViv1
 )
 
 add_compile_options(-Wno-pragmas)
