@@ -50,6 +50,7 @@ set(EXERCISES
     CuboIluminacao
     M2
     AtivViv1
+    M3
 )
 
 add_compile_options(-Wno-pragmas)
