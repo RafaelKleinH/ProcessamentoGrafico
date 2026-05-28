@@ -1,11 +1,3 @@
-/* Hello Triangle - código adaptado de https://learnopengl.com/#!Getting-started/Hello-Triangle
- *
- * Adaptado por Rossana Baptista Queiroz
- * para as disciplinas de Processamento Gráfico/Computação Gráfica - Unisinos
- * Versão inicial: 7/4/2017
- * Última atualização em 07/03/2025
- */
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -133,7 +125,7 @@ int main()
 {
     glfwInit();
 
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Ola 3D -- Rossana!", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "AtivViv2", nullptr, nullptr);
     if (!window)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -142,11 +134,7 @@ int main()
     }
 
     glfwMakeContextCurrent(window);
-
-    // Fazendo o registro da função de callback para a janela GLFW
     glfwSetKeyCallback(window, key_callback);
-
-    // GLAD: carrega todos os ponteiros d funções da OpenGL
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -194,7 +182,6 @@ int main()
     GLint KdLoc = glGetUniformLocation(shaderID, "Kd");
     GLint KsLoc = glGetUniformLocation(shaderID, "Ks");
     GLint qLoc = glGetUniformLocation(shaderID, "q");
-    // Uniforms de iluminação (arrays para múltiplas luzes)
     GLint numLightsLoc = glGetUniformLocation(shaderID, "numLights");
     GLint lightPosLoc = glGetUniformLocation(shaderID, "lightPos[0]");
     GLint lightColorLoc = glGetUniformLocation(shaderID, "lightColor[0]");
