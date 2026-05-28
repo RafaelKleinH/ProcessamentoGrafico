@@ -127,11 +127,8 @@ int principalObject = 0;
 std::vector<Object> objects;
 int imgWidth = 1024, imgHeight = 1024;
 GLuint textId;
-
-// Three-point lighting toggles (1 = key, 2 = fill, 3 = back)
 bool lightEnabledArr[3] = { true, true, true };
 
-// Função MAIN
 int main()
 {
     glfwInit();
