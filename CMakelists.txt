@@ -53,6 +53,7 @@ set(EXERCISES
     M3
     m4
     AtivViv2
+    m5
 )
 
 add_compile_options(-Wno-pragmas)
