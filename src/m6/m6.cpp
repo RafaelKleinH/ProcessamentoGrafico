@@ -355,7 +355,7 @@ static void key_callback_glfw(GLFWwindow *window, int key, int scancode, int act
                  translateYPlus, translateYMinus,
                  translateZPlus, translateZMinus,
                  scalePlus, scaleMinus,
-                 principalObject, objects, lightEnabledArr);
+                 principalObject, objects, lightEnabledArr, actualId);
 }
 
 static void mouse_callback_glfw(GLFWwindow *window, double xpos, double ypos)
@@ -369,24 +369,57 @@ static void scroll_callback_glfw(GLFWwindow *window, double xoffset, double yoff
 }
 
 void bezierPoint(float t,Object &obj, float deltaTime) {
-        glm::vec3 current(obj.x, obj.y, obj.z);
-        glm::vec3 target = glm::vec3(obj.path[obj.pathIndex].x, obj.path[obj.pathIndex].y, obj.path[obj.pathIndex].z);
-        glm::vec3 direction = target - current;
+        glm::vec4 current(obj.x, obj.y, obj.z, obj.scaleFactor);
+        glm::vec4 target = glm::vec4(obj.path[obj.pathIndex].x, obj.path[obj.pathIndex].y, obj.path[obj.pathIndex].z, obj.path[obj.pathIndex].scaleFactor);
+        glm::vec4 direction = target - current;
         float distance = glm::length(direction);
+        
+        bool distanceReach = true;
+        bool angleReach = true;
 
         if (distance > 0.0001f) {
-            glm::vec3 move = glm::normalize(direction) * t * deltaTime;
+            glm::vec4 move = glm::normalize(direction) * t * deltaTime;
 
             if (glm::length(move) >= distance || distance < 0.01f) { 
                 obj.x = target.x;
                 obj.y = target.y;
                 obj.z = target.z;
-                std::cout << "Chegou ao ponto: " << obj.pathIndex << std::endl;
-                obj.pathIndex = (obj.pathIndex + 1) % obj.path.size();
+                obj.scaleFactor = target.w;
+                std::cout << "Chegou ao ponto: " << obj.pathIndex << ". Para o objeto: " << obj.id << std::endl;
+                distanceReach = true;
             } else {
+                distanceReach = false;
                 obj.x += move.x;
                 obj.y += move.y;
                 obj.z += move.z;
+                obj.scaleFactor += move.w;
+            }
         }
-     }
-    }
+
+        glm::vec3 angleCurrent = glm::vec3(obj.angleX, obj.angleY, obj.angleZ);
+        glm::vec3 angleTarget = glm::vec3(obj.path[obj.pathIndex].rotateX, obj.path[obj.pathIndex].rotateY, obj.path[obj.pathIndex].rotateZ);
+        glm::vec3 angleDirection = angleTarget - angleCurrent;
+        float angleDistance = glm::length(angleDirection);
+
+        if (angleDistance > 0.0001f) {
+            glm::vec3 angleMove = glm::normalize(angleDirection) * t * deltaTime;
+
+            if (glm::length(angleMove) >= angleDistance || angleDistance < 0.01f) { 
+                obj.angleX = angleTarget.x;
+                obj.angleY = angleTarget.y;
+                obj.angleZ = angleTarget.z;
+                std::cout << "Chegou ao ponto: " << obj.pathIndex << ". Para o objeto: " << obj.id << std::endl;
+                angleReach = true;
+            } else {
+                angleReach = false;
+                obj.angleX += angleMove.x;
+                obj.angleY += angleMove.y;
+                obj.angleZ += angleMove.z;
+            }
+        }
+        
+
+        if (distanceReach && angleReach) {
+            obj.pathIndex = (obj.pathIndex + 1) % obj.path.size();
+        }
+    }   

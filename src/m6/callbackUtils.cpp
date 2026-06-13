@@ -28,7 +28,7 @@ void scroll_callback1(GLFWwindow *window, double xoffset, double yoffset, float 
         fov = 45.0f;
 }
 
-void mouse_callback1(GLFWwindow *window, double xpos, double ypos, bool firstMouse, float &lastX, float &lastY, float &yaw, float &pitch, glm::vec3 &cameraFront, glm::vec3 &cameraUp)
+void mouse_callback1(GLFWwindow *window, double xpos, double ypos, bool &firstMouse, float &lastX, float &lastY, float &yaw, float &pitch, glm::vec3 &cameraFront, glm::vec3 &cameraUp)
 {
     if (firstMouse)
     {
@@ -61,7 +61,7 @@ void mouse_callback1(GLFWwindow *window, double xpos, double ypos, bool firstMou
     cameraUp = glm::normalize(glm::cross(right, cameraFront));
 }
 
-void key_callback1(GLFWwindow *window, int key, int scancode, int action, int mode, bool &rotateX, bool &rotateY, bool &rotateZ, bool &translateXPlus, bool &translateXMinus, bool &translateYPlus, bool &translateYMinus, bool &translateZPlus, bool &translateZMinus, bool &scalePlus, bool &scaleMinus, int &principalObject, std::vector<Object> &objects, bool lightEnabledArr[3])
+void key_callback1(GLFWwindow *window, int key, int scancode, int action, int mode, bool &rotateX, bool &rotateY, bool &rotateZ, bool &translateXPlus, bool &translateXMinus, bool &translateYPlus, bool &translateYMinus, bool &translateZPlus, bool &translateZMinus, bool &scalePlus, bool &scaleMinus, int &principalObject, std::vector<Object> &objects, bool lightEnabledArr[3], int &id)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -185,6 +185,8 @@ void key_callback1(GLFWwindow *window, int key, int scancode, int action, int mo
     {
         Object obj;
         obj.pathIndex = 0;
+        obj.id = id;
+        id += 1;
         objects.push_back(obj);
         principalObject = objects.size() - 1;
     }
@@ -216,14 +218,18 @@ void key_callback1(GLFWwindow *window, int key, int scancode, int action, int mo
         point.x = objects[principalObject].x;
         point.y = objects[principalObject].y; 
         point.z = objects[principalObject].z;  
-        std::cout << "Adicionando ponto no caminho: (" << point.x << ", " << point.y << ", " << point.z << ")" << std::endl;
+        point.scaleFactor = objects[principalObject].scaleFactor;
+        point.rotateX = objects[principalObject].angleX;
+        point.rotateY = objects[principalObject].angleY;
+        point.rotateZ = objects[principalObject].angleZ;
+        std::cout << "Adicionando ponto no caminho: (x:" << point.x << ", y:" << point.y << ", z:" << point.z << ", escala:" << point.scaleFactor << ", rotação X:" << point.rotateX << ", rotação Y:" << point.rotateY << ", rotação Z:" << point.rotateZ << "). Para o objeto: " << objects[principalObject].id << std::endl;
         objects[principalObject].path.push_back(point);
     }
 
     if (key == GLFW_KEY_N && action == GLFW_PRESS)
     {
         objects[principalObject].pathFollow = !objects[principalObject].pathFollow;
-        objects[principalObject].pathFollow ? std::cout << "Seguindo caminho" << std::endl : std::cout << "Parou de seguir caminho" << std::endl;
+        objects[principalObject].pathFollow ? std::cout << "Seguindo caminho. Para o objeto: " << objects[principalObject].id << std::endl : std::cout << "Parou de seguir caminho. Para o objeto: " << objects[principalObject].id << std::endl;
     }
 
     

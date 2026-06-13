@@ -5,7 +5,8 @@
 
 struct BezierPoint
 {
-    float x, y, z;
+    float x, y, z, scaleFactor, rotateX, rotateY, rotateZ;
+
 };
 
 struct Object
