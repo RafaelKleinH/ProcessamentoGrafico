@@ -54,6 +54,7 @@ set(EXERCISES
     m4
     AtivViv2
     m5
+    m6/m6
 )
 
 add_compile_options(-Wno-pragmas)
@@ -79,7 +80,8 @@ endif()
 
 # Cria os executáveis
 foreach(EXERCISE ${EXERCISES})
-    add_executable(${EXERCISE} src/${EXERCISE}.cpp ${GLAD_C_FILE})
-    target_include_directories(${EXERCISE} PRIVATE ${CMAKE_SOURCE_DIR}/include/glad ${glm_SOURCE_DIR} ${stb_image_SOURCE_DIR})
-    target_link_libraries(${EXERCISE} glfw ${OPENGL_LIBS})
+    get_filename_component(EXERCISE_NAME ${EXERCISE} NAME)
+    add_executable(${EXERCISE_NAME} src/${EXERCISE}.cpp ${GLAD_C_FILE})
+    target_include_directories(${EXERCISE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/glad ${glm_SOURCE_DIR} ${stb_image_SOURCE_DIR})
+    target_link_libraries(${EXERCISE_NAME} glfw ${OPENGL_LIBS})
 endforeach()
